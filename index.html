@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>疯疯の超级破产大转盘</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            gap: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #00796b;
+            margin-bottom: 20px;
+        }
+
+        .wheel-container {
+            position: relative;
+            max-width: 500px;
+        }
+
+        canvas {
+            border: 10px solid #00796b;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .pointer {
+            position: absolute;
+            top: 48.5%;
+            left: 100%;
+            transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 40px solid #d32f2f;
+            z-index: 10;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            border: 2px solid #00796b;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-container button,
+        .input-container input {
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .input-container button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .input-container button:hover {
+            background-color: #004d40;
+        }
+
+        .input-container button:active {
+            background-color: #00251a;
+        }
+
+        .input-container input {
+            border: 2px solid #00796b;
+            padding-left: 15px;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 250px;
+            /* 限制最大高度 */
+            overflow-y: auto;
+            /* 超过最大高度时显示垂直滚动条 */
+            padding-right: 10px;
+            /* 给右侧容器加些内边距，避免滚动条挡住内容 */
+        }
+
+        .option-item {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .option-item button {
+            background-color: #e57373;
+            padding: 5px 10px;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .wheel-container button {
+            margin-top: 30px;
+            padding: 12px 25px;
+            font-size: 20px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .wheel-container button:hover {
+            background-color: #004d40;
+        }
+
+        .wheel-container button:active {
+            background-color: #00251a;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .wheel-container {
+                max-width: 400px;
+            }
+
+            .input-container {
+                max-width: 350px;
+                width: 100%;
+                padding: 15px;
+            }
+
+            .input-container button {
+                font-size: 14px;
+                padding: 8px 20px;
+            }
+
+            .input-container input {
+                font-size: 14px;
+            }
+
+            .wheel-container button {
+                font-size: 18px;
+                padding: 10px 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container" id="left-container">
+        <div class="wheel-container">
+            <h1>疯疯の起几套！</h1>
+            <div class="pointer"></div>
+            <canvas id="wheelCanvasLeft" width="500" height="500"></canvas>
+            <button id="spinBtnLeft">让我们转起来！</button>
+        </div>
+
+        <div class="input-container">
+            <div class="options-container" id="optionsListLeft">
+                <div class="option-item">
+                    <input type="text" class="option-input" value="什么都不穿！">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="一级套">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="二级套">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="三级套">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="四级套">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="五级套！">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="六级套！！！">
+                    <button class="deleteBtn">X</button>
+                </div>
+            </div>
+            <button id="addOptionBtnLeft">添加选项</button>
+        </div>
+    </div>
+
+    <div class="container" id="center-container">
+        <div class="wheel-container">
+            <h1>疯疯の打什么枪！</h1>
+            <div class="pointer"></div>
+            <canvas id="wheelCanvasCenter" width="500" height="500"></canvas>
+            <button id="spinBtnCenter">让我们转起来！</button>
+        </div>
+
+        <div class="input-container">
+            <div class="options-container" id="optionsListCenter">
+                <div class="option-item">
+                    <input type="text" class="option-input" value="M7战斗步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="ASh-12战斗步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="K416突击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="AS Val突击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="M4A1突击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="AUG突击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="AK-12突击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="SCAR-H战斗步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="191式突击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="AKM突击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="SG552突击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="G3战斗步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="QBZ95-1突击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="PTR-32突击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="CAR-15突击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="M16A4突击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="AKS-74U突击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="MP7冲锋枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="Vector冲锋枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="P90冲锋枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="SR-3M紧凑突击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="MP5冲锋枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="SMG-45冲锋枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="勇士冲锋枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="野牛冲锋枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="UZI冲锋枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="AWM狙击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="M700狙击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="R93狙击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="SV-98狙击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="S12K霰弹枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="M1014霰弹枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="M870霰弹枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="SR-25射手步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="M14射手步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="SVD狙击步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="PSG-1射手步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="VSS射手步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="Mini-14射手步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="SKS射手步枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="M250通用机枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="M249轻机枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="PKM通用机枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="G18手枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="沙漠之鹰">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="M1911手枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="93R手枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value=".357左轮手枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="G17手枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="QSZ92G手枪">
+                    <button class="deleteBtn">X</button>
+                </div>
+            </div>
+            <button id="addOptionBtnCenter">添加选项</button>
+        </div>
+    </div>
+
+    <div class="container" id="right-container">
+        <div class="wheel-container">
+            <h1>疯疯の打什么图！</h1>
+            <div class="pointer"></div>
+            <canvas id="wheelCanvasRight" width="500" height="500"></canvas>
+            <button id="spinBtnRight">让我们转起来！</button>
+        </div>
+
+        <div class="input-container">
+            <div class="options-container" id="optionsListRight">
+                <div class="option-item">
+                    <input type="text" class="option-input" value="常规-零号大坝">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="机密-零号大坝">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="常规-长工溪谷">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="机密-长工溪谷">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="机密-巴克什">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="机密-航空基地">
+                    <button class="deleteBtn">X</button>
+                </div>
+                <div class="option-item">
+                    <input type="text" class="option-input" value="绝密-航空基地">
+                    <button class="deleteBtn">X</button>
+                </div>
+            </div>
+            <button id="addOptionBtnRight">添加选项</button>
+        </div>
+    </div>
+    <script>
+        // 创建转盘及相关逻辑
+        function createWheelAndLogic(canvasId, spinBtnId, optionsListId, addOptionBtnId) {
+            const wheelCanvas = document.getElementById(canvasId); // 获取canvas元素
+            const ctx = wheelCanvas.getContext("2d"); // 获取canvas的绘图上下文
+            const spinBtn = document.getElementById(spinBtnId); // 获取转动按钮
+            const addOptionBtn = document.getElementById(addOptionBtnId); // 获取添加选项按钮
+            const optionsList = document.getElementById(optionsListId); // 获取选项列表容器
+
+            let segments = []; // 存储转盘分段的选项数组
+            const segmentColors = [
+                "#FFDD57", // 柠檬黄
+                "#00BFAE", // 青绿色
+                "#FF5733", // 鲜艳橙色
+                "#4CAF50", // 草绿色
+                "#00CFFF", // 浅天蓝色
+                "#FFABAB", // 柔和的粉色
+                "#FFEB3B", // 明亮黄色
+                "#E91E63", // 魅惑粉色
+                "#8BC34A", // 黄绿色
+                "#03A9F4", // 亮蓝色
+                "#FF7043", // 温暖橙色
+                "#9C27B0", // 紫色
+                "#FFC107", // 明亮金色
+                "#2196F3", // 深天蓝
+                "#81C784"  // 清新绿色
+            ];
+
+            // 页面加载完成后执行的函数
+            document.addEventListener('DOMContentLoaded', function () {
+                loadOptions(); // 加载选项
+                updateWheel(); // 加载选项后立即更新转盘
+            });
+
+            // 加载选项
+            function loadOptions() {
+                const predefinedOptions = document.querySelectorAll(`#${optionsListId} .option-input`);
+                const deleteBtns = document.querySelectorAll(`#${optionsListId} .deleteBtn`); // 获取所有删除按钮
+                segments = []; // 清空 segments 数组，确保重新加载选项
+
+                // 遍历所有的选项输入框，加载到 segments 数组
+                predefinedOptions.forEach(input => {
+                    if (input.value.trim() !== "") {
+                        segments.push(input.value.trim()); // 将每个输入框的值添加到segments数组
+                    }
+                });
+
+                // 为所有的删除按钮绑定点击事件
+                deleteBtns.forEach(deleteBtn => {
+                    deleteBtn.addEventListener("click", () => {
+                        const optionItem = deleteBtn.parentElement; // 获取当前的选项项
+                        optionItem.remove(); // 删除选项
+                        updateWheel(); // 更新转盘
+                    });
+                });
+            }
+
+            // 绘制转盘
+            let currentAngle = 0; // 当前的转盘角度
+            function drawWheel() {
+                const numSegments = segments.length; // 获取转盘分段数量
+                const anglePerSegment = (2 * Math.PI) / numSegments; // 每个分段的角度
+                ctx.clearRect(0, 0, wheelCanvas.width, wheelCanvas.height); // 清空画布
+                for (let i = 0; i < numSegments; i++) {
+                    const angle = currentAngle + i * anglePerSegment; // 计算每个分段的角度
+                    ctx.beginPath();
+                    ctx.moveTo(250, 250); // 起始点为圆心
+                    ctx.arc(250, 250, 250, angle, angle + anglePerSegment); // 绘制扇形
+                    ctx.fillStyle = segmentColors[i % segmentColors.length]; // 设置颜色
+                    ctx.fill();
+                    ctx.save();
+                    ctx.translate(250, 250); // 移动到圆心
+                    ctx.rotate(angle + anglePerSegment / 2); // 旋转到该分段位置
+                    ctx.textAlign = "center";
+                    ctx.fillStyle = "#FFF"; // 设置文字颜色为白色
+                    ctx.font = "bold 20px Arial"; // 设置字体样式
+                    ctx.fillText(segments[i], 150, 10); // 绘制文字
+                    ctx.restore();
+                }
+            }
+
+            // 旋转转盘逻辑
+            let currentSpeed = 0;
+            let spinningTime = 0;
+            const maxRotationTime = 10000;
+            const minRotationTime = 3000;
+            let deceleration = 0.0005;
+            let spinning = false;
+
+            function spinWheel() {
+                if (!spinning) {
+                    spinning = true;
+                    spinningTime = Math.random() * (maxRotationTime - minRotationTime) + minRotationTime; // 随机转动时间
+                    currentSpeed = 0.5 * (spinningTime / maxRotationTime); // 根据转动时间调整速度
+                    startDecelerating();
+                    requestAnimationFrame(rotateWheel); // 开始动画
+                }
+            }
+
+            function startDecelerating() {
+                deceleration = 0.0005;
+            }
+
+            function rotateWheel() {
+                if (!spinning) return;
+                if (currentSpeed > 0) {
+                    currentAngle += currentSpeed; // 更新角度
+                    currentSpeed -= deceleration; // 减速
+                    if (currentSpeed < 0) currentSpeed = 0;
+                }
+                drawWheel(); // 重绘转盘
+                currentAngle = currentAngle % (2 * Math.PI); // 保证角度在0到2π之间
+                if (currentSpeed === 0) {
+                    spinning = false;
+                    calculateResult(); // 计算结果
+                } else {
+                    requestAnimationFrame(rotateWheel); // 继续旋转
+                }
+            }
+
+            // 计算结果并显示
+            function calculateResult() {
+                const finalAngle = (2 * Math.PI - currentAngle) % (2 * Math.PI);
+                const segmentIndex = Math.floor(finalAngle / (2 * Math.PI / segments.length)); // 计算在哪个分段
+                alert(`本次大转盘抽取到: ${segments[segmentIndex]}!`);
+            }
+
+            // 添加选项按钮点击事件
+            addOptionBtn.addEventListener("click", () => {
+                const optionItem = document.createElement("div"); // 创建新选项
+                optionItem.classList.add("option-item");
+                const optionInput = document.createElement("input"); // 创建输入框
+                optionInput.type = "text";
+                optionInput.classList.add("option-input");
+                const deleteBtn = document.createElement("button"); // 创建删除按钮
+                deleteBtn.textContent = "X";
+                deleteBtn.addEventListener("click", () => {
+                    optionItem.remove(); // 删除选项
+                    updateWheel(); // 更新转盘
+                });
+                optionItem.appendChild(optionInput); // 添加输入框
+                optionItem.appendChild(deleteBtn); // 添加删除按钮
+                optionsList.appendChild(optionItem); // 添加到选项列表
+                optionInput.addEventListener("input", updateWheel); // 输入时更新转盘
+            });
+
+            // 更新转盘上的选项
+            function updateWheel() {
+                loadOptions(); // 加载选项
+                drawWheel(); // 重新绘制转盘
+            }
+
+            drawWheel(); // 初次绘制转盘
+            spinBtn.addEventListener("click", spinWheel); // 点击按钮开始旋转
+        }
+
+        // 初始化每个转盘及相关逻辑
+        createWheelAndLogic("wheelCanvasLeft", "spinBtnLeft", "optionsListLeft", "addOptionBtnLeft");
+        createWheelAndLogic("wheelCanvasCenter", "spinBtnCenter", "optionsListCenter", "addOptionBtnCenter");
+        createWheelAndLogic("wheelCanvasRight", "spinBtnRight", "optionsListRight", "addOptionBtnRight");
+    </script>
+
+
+</body>
+
+</html>
